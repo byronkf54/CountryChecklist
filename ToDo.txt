@@ -1,0 +1,11 @@
+ToDo:
+
+ - Missing Liechtenstein
+ - Missing Maldives
+ - unique ID
+ - retrieve data from DB
+ - on click change colour (with popup)
+ - problems with retrieving data from a module javascript file in html
+
+
+ 26/07 - fix zoom on reload
