@@ -1,0 +1,62 @@
+<nav style="width:100%" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <form action="/" method="GET" id="HomeForm">
+              <a class="nav-link active" id="homeButton" role="button">Home</a>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/CountryList" method="POST" id="CountryListForm">
+              <a class="nav-link" id="idButton" role="button">List</a>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/CountryMap" method="POST" id="CountryMapForm">
+              <a class="nav-link" id="mapButton" role="button">TBD</a>
+            </form>
+          </li>
+        </ul>
+        <form class="d-flex input-group w-auto">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Type query"
+            aria-label="Search"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            data-mdb-ripple-color="dark"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <script>
+    $("#HomeForm").click(function() {
+      $("#HomeForm").submit();
+    });
+    $("#CountryListForm").click(function() {
+      $("#CountryListForm").submit();
+    });
+
+    $("#CountryMapForm").click(function() {
+      $("#CountryMapForm").submit();
+    });
+  </script>
