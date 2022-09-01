@@ -1039,7 +1039,7 @@
     });
     $(document).on('click','.sm_state', function(event){
         var countryAbr = $(event.currentTarget).attr("class").replaceAll("sm_state", "").replace(" _", "");
-        var country = abr2name[countryAbr];    
+        var country = abr2name[countryAbr];
         // create popUp confirming visited country
         // popup will toggle between visited and not
         let message = "Please confirm you have visited " + country;

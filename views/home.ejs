@@ -10,9 +10,12 @@
 
   <body>
     <div id="Navbar" class="d-flex justify-content-center"></div>
-    <h3>Home Page</h3>
-    <div id="CountryMap"></div>
-    <%- include('map.ejs') %>
+    <div id="Dashboard">
+      <div id="HomeCountryMap" style="width: 50%;">
+        <%- include('map.ejs') %>
+      </div>
+    </div>
+    
   </body>
   <script>
     $(document).ready(function(){
