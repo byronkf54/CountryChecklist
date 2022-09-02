@@ -49,9 +49,18 @@
     });
 
     function sortList(list) {
-      list.children().detach().sort(function(a, b) {
-        return $(a).text().localeCompare($(b).text());
-      }).appendTo(list);
+      var sort = $('#CountryListSort').val();
+      if (sort == 'Visited') {
+        sortByVisited();
+      }
+      else if (sort == 'Unvisited') {
+        sortByUnvisited();
+      }
+      else {
+        list.children().detach().sort(function(a, b) {
+          return $(a).text().localeCompare($(b).text());
+        }).appendTo(list);
+      }      
     }
 
     function reverseList(list) {
@@ -59,37 +68,90 @@
         return $(a).text().localeCompare($(b).text());
       }).appendTo(list);
     }
+
+    function getVisitedAndUnvisited() {
+      var visitedCountriesList = [];
+      var unvisitedCountriesList = [];
+      for (let m in visited) {
+        if (visited[m]) {
+          visitedCountriesList.push(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+        }
+        else {
+          unvisitedCountriesList.push(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+        }
+      };
+      visitedCountriesList.sort();
+      unvisitedCountriesList.sort();
+
+      return [visitedCountriesList, unvisitedCountriesList];
+    }
     
     $('#CountryListFilter').on('change', function() {
       // this.value
       $('#CountryList').empty();
-      if (this.value == 'All') {
+      if (this.value == 'All') { // contains all visited & unvisited countries
         for (let m in visited) {
           var $list = $('#CountryList');
           $list.append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
-          sortList($list);
-        };
+        };        
       }
-      else if (this.value == 'Visited') {
+      else if (this.value == 'Visited') { // contains visited countries
         for (let m in visited) {
           if (visited[m]) {
             $('#CountryList').append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
-          }          
+          }
         };
       }
       else {
-        for (let m in visited) {
+        for (let m in visited) { // contains visited countries
           if (!visited[m]) {
             var $list = $('#CountryList');
             $list.append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
-            sortList($list);
-          }          
+          }
         };
       }
+      sortList($list);
     });
 
-    $('#CountryListSort').on('change', function() {
-      alert( this.value );
+    function sortByVisited() {
+      if ($('#CountryListFilter').val() == 'Unvisited') return; // if current filter is set to Unvisited we don't need to do anything
+
+      // optimised to use current contents
+      // where text contains true we put first
+      $('#CountryList').children().filter(":contains('true')").css('background-color', 'red');
+
+      $('#CountryList').empty();
+      var lists = getVisitedAndUnvisited();
+      var $list = $('#CountryList');
+      $list.append(lists[0]);
+      if ($('#CountryListFilter').val() != 'Visited') {
+        $list.append(lists[1]);
+      }
+    }
+
+    function sortByUnvisited() {
+      if ($('#CountryListFilter').val() == 'Visited') return; // if current filter is set to Visited we don't need to do anything
+      $('#CountryList').empty();
+      var lists = getVisitedAndUnvisited();
+      var $list = $('#CountryList');
+      $list.append(lists[1]);
+      if ($('#CountryListFilter').val() != 'Unvisited') {
+        $list.append(lists[0]);
+      }
+    }
+
+    // function sorts list according to 3 states
+    $('#CountryListSort').on('change', function() {      
+      if (this.value == 'Alphabetical') { // sorts current contents Alphabetically
+        var $list = $('#CountryList');
+        sortList($list);
+      }
+      else if (this.value == 'Visited') { // sorts current contents with Visited first
+        sortByVisited();
+      }
+      else { // sorts current contents with Unvisited first
+        sortByUnvisited();
+      }
     });
   </script>
 </html>
