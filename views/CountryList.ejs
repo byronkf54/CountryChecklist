@@ -34,7 +34,7 @@
     var visited = <%-JSON.stringify(visited)%>;
     var abr2name = <%-JSON.stringify(abr2name)%>;
 
-    $(document).ready(function(){
+    $(document).ready(function() {
       $('#Navbar').load("header.html", function() {
         $('a[id*=\'homeButton\']').attr('class', 'nav-link');
         $('#listButton').attr('class', 'nav-link active');
@@ -43,10 +43,15 @@
 
       for (let m in abr2name) {
         var $list = $('#CountryList');
-        $list.append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+        var color = "text-danger";
+        if (visited[m]) {
+          color = "text-success";
+        }
+        $list.append(`<li class="${color}""> ${abr2name[m]}</li>`);
         sortList($list);        
       };
     });
+
 
     function sortList(list) {
       var sort = $('#CountryListSort').val();
@@ -74,10 +79,10 @@
       var unvisitedCountriesList = [];
       for (let m in visited) {
         if (visited[m]) {
-          visitedCountriesList.push(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+          visitedCountriesList.push(`<li class="text-success"> ${abr2name[m]} </li>`);
         }
         else {
-          unvisitedCountriesList.push(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+          unvisitedCountriesList.push(`<li class="text-danger"> ${abr2name[m]} </li>`);
         }
       };
       visitedCountriesList.sort();
@@ -92,13 +97,17 @@
       if (this.value == 'All') { // contains all visited & unvisited countries
         for (let m in visited) {
           var $list = $('#CountryList');
-          $list.append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+          var color = "text-danger";
+          if (visited[m]) {
+            color = "text-success";
+          }
+          $list.append(`<li class="${color}""> ${abr2name[m]}</li>`);
         };        
       }
       else if (this.value == 'Visited') { // contains visited countries
         for (let m in visited) {
           if (visited[m]) {
-            $('#CountryList').append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+            $('#CountryList').append(`<li class="text-success"> ${abr2name[m]}</li>`);
           }
         };
       }
@@ -106,7 +115,7 @@
         for (let m in visited) { // contains visited countries
           if (!visited[m]) {
             var $list = $('#CountryList');
-            $list.append(`<li> ${abr2name[m]}: ${visited[m]} </li>`);
+            $list.append(`<li class="text-danger"> ${abr2name[m]}</li>`);
           }
         };
       }
@@ -118,7 +127,6 @@
 
       // optimised to use current contents
       // where text contains true we put first
-      $('#CountryList').children().filter(":contains('true')").css('background-color', 'red');
 
       $('#CountryList').empty();
       var lists = getVisitedAndUnvisited();
