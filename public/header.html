@@ -30,25 +30,21 @@
             </form>
           </li>
         </ul>
-        <form class="d-flex input-group w-auto">
-          <input
-            type="search"
-            class="form-control"
-            placeholder="Type query"
-            aria-label="Search"
-          />
-          <button
-            class="btn btn-outline-primary"
-            type="button"
-            data-mdb-ripple-color="dark"
-          >
-            Search
-          </button>
-        </form>
+        <div id="visitedCount"></div>
       </div>
     </div>
   </nav>
   <script>
+    $(document).ready(function(){
+      var count = 0;
+      $.ajax({
+        type: "GET",
+        url: "getVisitedCount"
+      }).done(function (data) {
+        $('#visitedCount').html("Countries Visited: " + data);
+      });
+    });
+
     $("#HomeForm").click(function() {
       $("#HomeForm").submit();
     });
