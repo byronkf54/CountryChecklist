@@ -31,8 +31,16 @@ app.post('/CountryMap', function(req,res) {
     });
 })
 
-app.get('/abr2name', function(req, res){    
+app.get('/abr2name', function(req, res) {
     return res.sendFile(__dirname + '\\public\\abr2name.js');
+})
+
+app.get('/getVisitedCount', function(req, res) {
+    var userID = 1;
+    db.getVisitedCount(userID).then((count) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(count));
+    })
 })
 
 app.post('/updateVisitedStatus', function(req, res) {

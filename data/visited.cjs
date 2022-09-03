@@ -30,9 +30,17 @@ function getVisited(userID) {
   });
 }
 
+function getVisitedCount(userID) {
+  return new Promise(function (resolve, reject) {
+    con.query(`SELECT COUNT(*) AS visitedCount FROM visited_status WHERE userID = ${userID} AND visited = 1`, (error, rows) => {
+      resolve(rows[0].visitedCount);
+    });
+  });
+}
+
 // function to update visited status
 function updateVisitedStatus(userID, countryAbr, status) {
   con.query(`UPDATE visited_status SET visited = ${status} WHERE userID = ${userID} AND countryAbr = '${countryAbr}'`);
 }
 
-module.exports = { initialiseVisits, getVisited, updateVisitedStatus }; // exports all functions for use in other files
+module.exports = { initialiseVisits, getVisited, getVisitedCount, updateVisitedStatus }; // exports all functions for use in other files
