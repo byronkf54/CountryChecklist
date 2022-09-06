@@ -9,9 +9,9 @@
   </head>
 
   <body>
-    <div id="Navbar" class="d-flex justify-content-center"></div>
-    <div id="Dashboard">
-      <div id="HomeCountryMap" style="width: 50%;">
+    <div id="navbar" class="d-flex justify-content-center"></div>
+    <div id="dashboard">
+      <div id="home-country-map" style="width: 50%;">
         <%- include('map.ejs') %>
       </div>
     </div>
@@ -19,7 +19,7 @@
   </body>
   <script>
     $(document).ready(function() {
-      $('#Navbar').load("header.html");      
+      $('#navbar').load("header.html");
     });
   </script>
 </html>
