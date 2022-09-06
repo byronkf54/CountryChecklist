@@ -1,0 +1,81 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h2 id="modal-header-text"></h2>
+        <span id="modal-close" class="close">&times;</span>        
+    </div>
+    <div class="modal-body">
+        <button id="set-date">Set date</button>
+        <button id="view-country-info">View country info</button>
+        <button id="view-country-photos">View country photos</button>
+        <p>
+            Change Visited Status:            
+        </p>
+        <button id="btn-visited" class="btn btn-success">Visited</button>
+        <button id="btn-unvisited" class="btn btn-danger">Unvisited</button>
+        
+    </div>
+    <div class="modal-footer">
+        <h3> </h3>
+    </div>
+</div>
+
+<script>
+    // if user clicks outside the modal it closes
+    $('body').click(function(event) {
+        modal.css("display", "none");
+    });
+
+    // modal close button
+    $('#modal-close').click(function() {
+        modal.css("display", "none");
+    });
+
+    // set date to visit country
+    $('#set-date').click(() => {
+
+    });
+
+    // view Country INFO
+    $('#view-country-info').click(() => {
+
+    });
+
+    // View Photos from visiting Country
+    $('#view-country-photos').click(() => {
+
+    });
+
+    $('#btn-visited').click(() => {
+        updateVisitedStatus(1);
+    });
+
+    $('#btn-unvisited').click(() => {
+        updateVisitedStatus(0);
+    });
+
+    // updates map colour & DB visited status
+    function updateVisitedStatus(status) {
+        simplemaps_worldmap_mapdata.state_specific[countryAbr].color = visited[countryAbr] ? "#ff0000" : visited_colour;
+        simplemaps_worldmap_mapdata.state_specific[countryAbr].hover_color = visited[countryAbr] ? "#00ff00" : visited_colour_hover;
+        
+        // ajax post to update DB
+        $.ajax({
+            type: "POST",
+            url: "updateVisitedStatus",
+            data: {
+                'countryAbr': countryAbr,
+                'visitedStatus': status
+            },
+            success: location.reload()
+        });
+    }
+
+    /* modal options:
+     * - set date to visit?
+     * - View country info
+     * - Photos
+     * - Change 2 Visited
+     * - Change 2 Unvisited
+     *
+    */
+</script>
