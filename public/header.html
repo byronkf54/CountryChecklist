@@ -15,22 +15,22 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <form action="/" method="GET" id="HomeForm">
-              <a class="nav-link active" id="homeButton" role="button">Home</a>
+            <form action="/" method="GET" id="home-form">
+              <a class="nav-link active" id="home-button" role="button">Home</a>
             </form>
           </li>
           <li class="nav-item">
-            <form action="/CountryList" method="POST" id="CountryListForm">
-              <a class="nav-link" id="listButton" role="button">List</a>
+            <form action="/CountryList" method="POST" id="country-list-form">
+              <a class="nav-link" id="list-button" role="button">List</a>
             </form>
           </li>
           <li class="nav-item">
-            <form action="/CountryMap" method="POST" id="CountryMapForm">
-              <a class="nav-link" id="mapButton" role="button">Map</a>
+            <form action="/CountryMap" method="POST" id="country-map-form">
+              <a class="nav-link" id="map-button" role="button">Map</a>
             </form>
           </li>
         </ul>
-        <div id="visitedCount"></div>
+        <div id="visited-count"></div>
       </div>
     </div>
   </nav>
@@ -41,18 +41,18 @@
         type: "GET",
         url: "getVisitedCount"
       }).done(function (data) {
-        $('#visitedCount').html("Countries Visited: " + data);
+        $('#visited-count').html("Countries Visited: " + data);
       });
     });
 
-    $("#HomeForm").click(function() {
-      $("#HomeForm").submit();
+    $("#home-form").click(function() {
+      $("#home-form").submit();
     });
-    $("#CountryListForm").click(function() {
-      $("#CountryListForm").submit();
+    $("#country-list-form").click(function() {
+      $("#country-list-form").submit();
     });
 
-    $("#CountryMapForm").click(function() {
-      $("#CountryMapForm").submit();
+    $("#country-map-form").click(function() {
+      $("#country-map-form").submit();
     });
   </script>

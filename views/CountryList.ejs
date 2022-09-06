@@ -8,23 +8,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body>
-    <div id="Navbar" class="d-flex justify-content-center"></div>
-    <div id="CountryListOps">
+    <div id="navbar" class="d-flex justify-content-center"></div>
+    <div id="country-list-ops">
       Filter By:
-      <select id="CountryListFilter">
+      <select id="country-list-filter">
         <option value="All">All</option>
         <option value="Visited">Visited</option>
         <option value="Unvisited">Unvisited</option>
       </select>
       Sort by:
-      <select id="CountryListSort">
+      <select id="country-list-sort">
         <option value="Alphabetical">Alphabetical</option>
         <option value="Visited">Visited</option>
         <option value="Unvisited">Unvisited</option>
       </select>
     </div>
     <div>
-      <ul id="CountryList">
+      <ul id="country-list">
       </ul>
     </div>
     
@@ -35,14 +35,14 @@
     var abr2name = <%-JSON.stringify(abr2name)%>;
 
     $(document).ready(function() {
-      $('#Navbar').load("header.html", function() {
-        $('a[id*=\'homeButton\']').attr('class', 'nav-link');
-        $('#listButton').attr('class', 'nav-link active');
-        $('#mapButton').attr('class', 'nav-link');
+      $('#navbar').load("header.html", function() {
+        $('#home-button').attr('class', 'nav-link');
+        $('#list-button').attr('class', 'nav-link active');
+        $('#map-button').attr('class', 'nav-link');
       });
 
       for (let m in abr2name) {
-        var $list = $('#CountryList');
+        var $list = $('#country-list');
         var color = "text-danger";
         if (visited[m]) {
           color = "text-success";
@@ -54,7 +54,7 @@
 
 
     function sortList(list) {
-      var sort = $('#CountryListSort').val();
+      var sort = $('#country-list-sort').val();
       if (sort == 'Visited') {
         sortByVisited();
       }
@@ -91,12 +91,12 @@
       return [visitedCountriesList, unvisitedCountriesList];
     }
     
-    $('#CountryListFilter').on('change', function() {
+    $('#country-list-filter').on('change', function() {
       // this.value
-      $('#CountryList').empty();
+      $('#country-list').empty();
       if (this.value == 'All') { // contains all visited & unvisited countries
         for (let m in visited) {
-          var $list = $('#CountryList');
+          var $list = $('#country-list');
           var color = "text-danger";
           if (visited[m]) {
             color = "text-success";
@@ -107,14 +107,14 @@
       else if (this.value == 'Visited') { // contains visited countries
         for (let m in visited) {
           if (visited[m]) {
-            $('#CountryList').append(`<li class="text-success"> ${abr2name[m]}</li>`);
+            $('#country-list').append(`<li class="text-success"> ${abr2name[m]}</li>`);
           }
         };
       }
       else {
         for (let m in visited) { // contains visited countries
           if (!visited[m]) {
-            var $list = $('#CountryList');
+            var $list = $('#country-list');
             $list.append(`<li class="text-danger"> ${abr2name[m]}</li>`);
           }
         };
@@ -123,35 +123,35 @@
     });
 
     function sortByVisited() {
-      if ($('#CountryListFilter').val() == 'Unvisited') return; // if current filter is set to Unvisited we don't need to do anything
+      if ($('#country-list-filter').val() == 'Unvisited') return; // if current filter is set to Unvisited we don't need to do anything
 
       // optimised to use current contents
       // where text contains true we put first
 
-      $('#CountryList').empty();
+      $('#country-list').empty();
       var lists = getVisitedAndUnvisited();
-      var $list = $('#CountryList');
+      var $list = $('#country-list');
       $list.append(lists[0]);
-      if ($('#CountryListFilter').val() != 'Visited') {
+      if ($('#country-list-filter').val() != 'Visited') {
         $list.append(lists[1]);
       }
     }
 
     function sortByUnvisited() {
-      if ($('#CountryListFilter').val() == 'Visited') return; // if current filter is set to Visited we don't need to do anything
-      $('#CountryList').empty();
+      if ($('#country-list-filter').val() == 'Visited') return; // if current filter is set to Visited we don't need to do anything
+      $('#country-list').empty();
       var lists = getVisitedAndUnvisited();
-      var $list = $('#CountryList');
+      var $list = $('#country-list');
       $list.append(lists[1]);
-      if ($('#CountryListFilter').val() != 'Unvisited') {
+      if ($('#country-list-filter').val() != 'Unvisited') {
         $list.append(lists[0]);
       }
     }
 
     // function sorts list according to 3 states
-    $('#CountryListSort').on('change', function() {      
+    $('#Country-list-sort').on('change', function() {      
       if (this.value == 'Alphabetical') { // sorts current contents Alphabetically
-        var $list = $('#CountryList');
+        var $list = $('#country-list');
         sortList($list);
       }
       else if (this.value == 'Visited') { // sorts current contents with Visited first
