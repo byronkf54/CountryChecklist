@@ -2,9 +2,11 @@
 <html>
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/main.css">
     </head>
     <body>
-        <div id="Navbar" class="d-flex justify-content-center"></div>
+        <div id="navbar" class="d-flex justify-content-center"></div>
+        <div id="country-modal" class="modal"></div>
         <div id="map"></div>
     </body>
 </html>
@@ -1030,41 +1032,29 @@
 
 
 <script>
-    var abr2name = <%-JSON.stringify(abr2name)%>
-    $(document).ready(function(){
-      $('#Navbar').load("header.html");
-      $('#mapButton').attr('class', 'nav-link active');
-      $('#homeButton').attr('class', 'nav-link');
-      $('#listButton').attr('class', 'nav-link');
-    });
-    $(document).on('click','.sm_state', function(event){
-        var countryAbr = $(event.currentTarget).attr("class").replaceAll("sm_state", "").replace(" _", "");
-        var country = abr2name[countryAbr];
-        // create popUp confirming visited country
+    var abr2name = <%-JSON.stringify(abr2name)%>;
+    var modal = $('#country-modal');
+    var countryAbr;
+    $(document).ready(function() {
+        $('#navbar').load("header.html", function() {
+            $('a[id*=\'homeButton\']').attr('class', 'nav-link');
+            $('#listButton').attr('class', 'nav-link');
+            $('#mapButton').attr('class', 'nav-link active');
+        });
+      $('#country-modal').load("CountryModal.html");      
+    });    
+
+    function modalResult(country) {
+        $('#modal-header-text').html(country);
+        modal.css("display", "block");
+    }    
+
+    $(document).on('click','.sm_state', function(event) {
+        // get country abreviation from class name
+        countryAbr = $(event.currentTarget).attr("class").replaceAll("sm_state", "").replace(" _", "");
+        // get full country name
+        var country = abr2name[countryAbr];        
         // popup will toggle between visited and not
-        let message = "Please confirm you have visited " + country;
-        var status = 1;
-        if (visited[countryAbr]) { // visited -> not visited
-            message = "Please confirm you want to reset the status of " + country;
-            status = 0;
-        }
-        let isExecuted = confirm(message);
-        // update DB
-        if (isExecuted) {
-            simplemaps_worldmap_mapdata.state_specific[countryAbr].color = visited[countryAbr] ? "#ff0000" : visited_colour;
-            simplemaps_worldmap_mapdata.state_specific[countryAbr].hover_color = visited[countryAbr] ? "#00ff00" : visited_colour_hover;
-            
-            // ajax post to update tempDB
-            $.ajax({
-                type: "POST",
-                url: "updateVisitedStatus",
-                data: {
-                    'countryAbr': countryAbr,
-                    'visitedStatus': status
-                },
-                success: location.reload()
-            });
-            // change fill using event            
-        }        
+        modalResult(country);
     });
 </script>
