@@ -24,7 +24,7 @@
       </select>
     </div>
     <div>
-      <ul id="country-list" class="list-unstyled card-columns" style="column-count: 4;">
+      <ul id="country-list">
       </ul>
     </div>
     
@@ -149,7 +149,7 @@
     }
 
     // function sorts list according to 3 states
-    $('#country-list-sort').on('change', function() {
+    $('#Country-list-sort').on('change', function() {      
       if (this.value == 'Alphabetical') { // sorts current contents Alphabetically
         var $list = $('#country-list');
         sortList($list);
