@@ -24,7 +24,7 @@
       </select>
     </div>
     <div>
-      <ul id="country-list" class="list-unstyled card-columns" style="column-count: 4;">
+      <ul id="country-list" class="row">
       </ul>
     </div>
     
@@ -47,7 +47,7 @@
         if (visited[m]) {
           color = "text-success";
         }
-        $list.append(`<li class="${color}""> ${abr2name[m]}</li>`);
+        $list.append(`<li class="col-xs-12 col-md-8 col-lg-4 ${color}""> ${abr2name[m]}</li>`);
         sortList($list);        
       };
     });
