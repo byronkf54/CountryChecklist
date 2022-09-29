@@ -52,10 +52,15 @@ app.post('/updateVisitedStatus', function(req, res) {
     db.updateVisitedStatus(userID, countryAbr, status);
 })
 
-app.get('/',function(req,res){    
+app.get('/home', function(req,res) {
+    
+})
+
+app.get('/',function(req,res) {
     res.set({
         'Access-control-Allow-Origin': '*'
     });
+    // check user is logged in
     // check if user has data in DB
     var userID = 1;
     db.initialiseVisits(userID);
