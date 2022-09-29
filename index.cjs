@@ -1,4 +1,5 @@
-var express=require("express");
+var express = require("express");
+var port = process.env.PORT || 3000;
 var bodyParser=require("body-parser");
 var fs = require('fs');
 
@@ -64,7 +65,7 @@ app.get('/',function(req,res){
         return res.render('home', { visited: visited, abr2name: abr2name });
     });
     
-}).listen(3000)
+}).listen(port)
   
   
-console.log("server listening at port 3000");
+console.log(`server listening at port ${port}`);
