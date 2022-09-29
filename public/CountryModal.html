@@ -7,8 +7,9 @@
         <button id="set-date">Set date</button>
         <button id="view-country-info">View country info</button>
         <button id="view-country-photos">View country photos</button>
+        <p></p>
         <p>
-            Change Visited Status:            
+            Change Visited Status:
         </p>
         <button id="btn-visited" class="btn btn-success">Visited</button>
         <button id="btn-unvisited" class="btn btn-danger">Unvisited</button>
@@ -23,11 +24,13 @@
     // if user clicks outside the modal it closes
     $('body').click(function(event) {
         modal.css("display", "none");
+        $('#view-country-photos').show();
     });
 
     // modal close button
     $('#modal-close').click(function() {
         modal.css("display", "none");
+        $('#view-country-photos').show();
     });
 
     // set date to visit country
@@ -42,7 +45,8 @@
 
     // View Photos from visiting Country
     $('#view-country-photos').click(() => {
-
+        // post 
+        // country name
     });
 
     $('#btn-visited').click(() => {
@@ -69,13 +73,4 @@
             success: location.reload()
         });
     }
-
-    /* modal options:
-     * - set date to visit?
-     * - View country info
-     * - Photos
-     * - Change 2 Visited
-     * - Change 2 Unvisited
-     *
-    */
 </script>
