@@ -10,8 +10,11 @@
 
   <body>
     <div id="navbar" class="d-flex justify-content-center"></div>
-    <div id="dashboard">
-      <div id="home-country-map" style="width: 50%;">
+    <div id="dashboard" style="width: 100%; overflow: hidden;">
+      <div id="home-country-list" style="width: auto; float: left;">
+        <%- include('CountryList.ejs') %>
+      </div>
+      <div id="home-country-map" style="margin-left: 25%;">
         <%- include('map.ejs') %>
       </div>
     </div>
