@@ -34,3 +34,8 @@
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
 }
+
+.float-child {
+  width: 50%;
+  float: left;
+}
