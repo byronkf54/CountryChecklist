@@ -1,10 +1,12 @@
 var express = require("express");
+const bcrypt = require("bcrypt");
 var port = process.env.PORT || 3000;
 var bodyParser=require("body-parser");
 var fs = require('fs');
 
 var abr2name = require("./public/abr2name.js").abr2name;
-var db = require("./data/visited.cjs");
+var visited_db = require("./data/visited.cjs");
+var user_db = require("./data/user.cjs");
 
 var app = express();
 app.use(bodyParser.json());
@@ -17,7 +19,7 @@ app.set('view engine', 'ejs');
 
 app.post('/CountryList', function(req,res) {
     var userID = 1;
-    db.getVisited(userID).then((visited) => {
+    visited_db.getVisited(userID).then((visited) => {
         return res.render('CountryList', { visited: visited, abr2name: abr2name });
     });
 })
@@ -25,9 +27,9 @@ app.post('/CountryList', function(req,res) {
 app.post('/CountryMap', function(req,res) {
     // check if user has data in DB
     var userID = 1;
-    db.initialiseVisits(userID);
+    visited_db.initialiseVisits(userID);
     // get current visit status
-    db.getVisited(userID).then((visited) => {
+    visited_db.getVisited(userID).then((visited) => {
         return res.render('map', { visited: visited, abr2name: abr2name });
     });
 })
@@ -63,9 +65,9 @@ app.get('/',function(req,res) {
     // check user is logged in
     // check if user has data in DB
     var userID = 1;
-    db.initialiseVisits(userID);
+    visited_db.initialiseVisits(userID);
     // get current visit status
-    db.getVisited(userID).then((visited) => {
+    visited_db.getVisited(userID).then((visited) => {
         // return res.render('home.ejs');
         return res.render('home', { visited: visited, abr2name: abr2name });
     });
