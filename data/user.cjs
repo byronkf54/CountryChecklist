@@ -1,0 +1,1 @@
+const pool = require('../lib/db'); // import for db connection

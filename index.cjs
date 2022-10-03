@@ -40,7 +40,7 @@ app.get('/abr2name', function(req, res) {
 
 app.get('/getVisitedCount', function(req, res) {
     var userID = 1;
-    db.getVisitedCount(userID).then((count) => {
+    visited_db.getVisitedCount(userID).then((count) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(count));
     })
@@ -51,7 +51,13 @@ app.post('/updateVisitedStatus', function(req, res) {
     var status = req.body.visitedStatus;
     var userID = 1;
     //update tempDB
-    db.updateVisitedStatus(userID, countryAbr, status);
+    visited_db.updateVisitedStatus(userID, countryAbr, status);
+})
+
+app.post('/createUser', async (req, res) => {
+    const user = req.body.name;
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // user_db.
 })
 
 app.get('/home', function(req,res) {
