@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Country Checklist</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body class="text-center">
+        <h1>Register</h1>
+        <form action="/createUser" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="user" placeholder="Enter Username">
+                <p id="user-error-list" class="text-danger"></p>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <form action="/login" method="get">
+            <button type="submit">Already registered?</button>
+        </form>        
+    </body>
+    <script>
+        var errors = <%-JSON.stringify(errors) %>;
+        if (errors.length != 0) {
+            errors.forEach(element => {
+                $('#user-error-list').html(element + ". ");
+            });
+        }
+    </script>
+</html>
