@@ -171,7 +171,7 @@ app.get('/',function(req,res) {
     });
     // check user is logged in    
     if (req.body.accessToken == undefined) {
-        res.render('login');
+        res.render('login', { errors: "" });
     }
 }).listen(port)
   
