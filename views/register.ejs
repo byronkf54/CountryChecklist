@@ -12,8 +12,7 @@
         <form action="/createUser" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="user" placeholder="Enter Username">
-                <p id="user-error-list" class="text-danger"></p>
+                <input type="text" class="form-control" id="username" name="user" placeholder="Enter Username">                
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -23,13 +22,14 @@
         </form>
         <form action="/login" method="get">
             <button type="submit">Already registered?</button>
-        </form>        
+        </form>
+        <p id="error-list" class="text-danger"></p>
     </body>
     <script>
         var errors = <%-JSON.stringify(errors) %>;
         if (errors.length != 0) {
             errors.forEach(element => {
-                $('#user-error-list').html(element + ". ");
+                $('#error-list').html(element + ". ");
             });
         }
     </script>

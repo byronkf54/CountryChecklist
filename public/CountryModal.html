@@ -59,18 +59,14 @@
 
     // updates map colour & DB visited status
     function updateVisitedStatus(status) {
-        simplemaps_worldmap_mapdata.state_specific[countryAbr].color = visited[countryAbr] ? "#ff0000" : visited_colour;
-        simplemaps_worldmap_mapdata.state_specific[countryAbr].hover_color = visited[countryAbr] ? "#00ff00" : visited_colour_hover;
-        
         // ajax post to update DB
-        $.ajax({
-            type: "POST",
+        $.post({
             url: "updateVisitedStatus",
             data: {
                 'countryAbr': countryAbr,
                 'visitedStatus': status
             },
-            success: location.reload()
+            success: setTimeout(() => location.reload(), 250)
         });
     }
 </script>

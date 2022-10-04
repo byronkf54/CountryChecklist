@@ -15,7 +15,7 @@ function createUser(user, hashedPassword) {
             else {
                 pool.query(`INSERT INTO users (user, password) VALUES ('${user}', '${hashedPassword}')`, (err, result) => {
                     if (err) throw (err)
-                    resolve(1);
+                    resolve(result.insertId);
                 })
             }
         })

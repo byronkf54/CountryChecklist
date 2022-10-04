@@ -21,10 +21,6 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-// app.use("/cookies", (req, res) => {
-// })
-
 app.set('view engine', 'ejs');
 
 app.post('/CountryList', accessToken.authenticateToken, function(req,res) {
@@ -37,7 +33,6 @@ app.post('/CountryList', accessToken.authenticateToken, function(req,res) {
 app.post('/CountryMap', accessToken.authenticateToken, function(req,res) {
     // check if user has data in DB
     var userID = req.cookies.userID;
-    visited_db.initialiseVisits(userID);
     // get current visit status
     visited_db.getVisited(userID).then((visited) => {
         return res.render('map', { visited: visited, abr2name: abr2name });
@@ -105,10 +100,7 @@ app.post('/login', function(req, res) {
     const user = req.body.user;
     const password = req.body.password;
 
-    console.log("User: " + user);
-
     user_db.getUser(user).then((result) => {
-        console.log("Get User Result: " + result.user);
         if (result.user == undefined) {
             return res.render('login', { errors: ["Username is not recognised"] })
         }
@@ -118,21 +110,10 @@ app.post('/login', function(req, res) {
                 if (comparison) {
                     // generate access token so user can access pages requiring authorisation
                     const token = accessToken.generateAccessToken({user: user});
-                    res.cookie("token", token, {
-                        secure: true,
-                        httpOnly: true,
-                        expires: dayjs().add(60, "minutes").toDate(),
-                    })
-                    res.cookie("userID", result.userID, {
-                        secure: true,
-                        httpOnly: true,
-                        expires: dayjs().add(60, "minutes").toDate(),
-                    })                  
-
-                    // check if user has data in DB
                     const userID = result.userID;
-                    console.log("UserID: " + userID);
-                    visited_db.initialiseVisits(userID);
+                    res = setCookies(res, "token", token);
+                    res = setCookies(res, "userID", userID);
+                    
                     // get current visit status
                     visited_db.getVisited(userID).then((visited) => {
                         return res.render('home', { visited: visited, abr2name: abr2name });
@@ -162,7 +143,15 @@ app.get('/register', function(req, res) {
 })
 
 app.get('/login', function(req, res) {
-    res.render('login', { errors: "" });
+    if (req.cookies.userID == req.cookies.token == undefined) {
+        res.render('login', { errors: "" });   
+    }
+    else {
+        const userID = req.cookies.userID;
+        visited_db.getVisited(userID).then((visited) => {
+            return res.render('home', { visited: visited, abr2name: abr2name });
+        });
+    }
 })
 
 app.get('/',function(req,res) {
@@ -170,10 +159,31 @@ app.get('/',function(req,res) {
         'Access-control-Allow-Origin': '*'
     });
     // check user is logged in    
-    if (req.body.accessToken == undefined) {
+    if (req.cookies.token == undefined) {
         res.render('login', { errors: "" });
     }
+    else if (req.cookies.userID != undefined) {
+        const userID = req.cookies.userID;
+        visited_db.getVisited(userID).then((visited) => {
+            return res.render('home', { visited: visited, abr2name: abr2name });
+        });
+    }
 }).listen(port)
-  
-  
+
+// default response for 404 error
+app.get('*', function(req, res) {
+    res.status(404).render('login', { errors: "Page not found" });
+});
+
+function setCookies(res, cookieName, value) {
+    res.cookie(cookieName, value, {
+        secure: true,
+        httpOnly: true,
+        expires: dayjs().add(60, "minutes").toDate(),
+    })
+    return res;
+}
+
+
+
 console.log(`server listening at port ${port}`);
