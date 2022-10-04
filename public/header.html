@@ -29,8 +29,13 @@
               <a class="nav-link" id="map-button" role="button">Map</a>
             </form>
           </li>
-        </ul>
+        </ul>        
         <div id="visited-count"></div>
+        <div class="mx-4">
+          <form action="/LogOut" method="POST" id="log-out-form">
+            <a class="nav-link" id="log-out-button" role="button">Log out</a>
+          </form>
+        </div>
       </div>
     </div>
   </nav>
@@ -44,6 +49,10 @@
         $('#visited-count').html("Countries Visited: " + data);
       });
     });
+
+    $("#log-out-button").click(function() {
+      $("#log-out-form").submit();
+    })
 
     $("#home-form").click(function() {
       $("#home-form").submit();

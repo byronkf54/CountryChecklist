@@ -56,6 +56,9 @@ app.post('/updateVisitedStatus', function(req, res) {
     var userID = req.cookies.userID;
     //update tempDB
     visited_db.updateVisitedStatus(userID, countryAbr, status);
+    visited_db.getVisited(userID).then((visited) => {
+        return res.render('home', { visited: visited, abr2name: abr2name });
+    });
 })
 
 app.post('/createUser', async function(req, res) {
@@ -64,26 +67,16 @@ app.post('/createUser', async function(req, res) {
     }
     const user = req.body.user;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    user_db.createUser(user, hashedPassword).then((result) => {
-        if (result == -1) {
+    user_db.createUser(user, hashedPassword).then((userID) => {
+        if (userID == -1) {
             return res.render('register', { errors: ["Username is not available"] })
         }
         else {
             // generate access token so user can stay logged in
             const token = accessToken.generateAccessToken({user: user});
-            res.cookie("token", token, {
-                secure: true,
-                httpOnly: true,
-                expires: dayjs().add(60, "minutes").toDate(),
-            })
-            res.cookie("userID", result.userID, {
-                secure: true,
-                httpOnly: true,
-                expires: dayjs().add(60, "minutes").toDate(),
-            })
-
-            // check if user has data in DB
-            const userID = result.userID;
+            res = setCookies(res, "token", token);
+            res = setCookies(res, "userID", userID);
+            
             visited_db.initialiseVisits(userID);
             // get current visit status
             visited_db.getVisited(userID).then((visited) => {
@@ -128,14 +121,17 @@ app.post('/login', function(req, res) {
     })
 })
 
-app.get('/home', function(req,res) {
-    jwt.verify(req.cookies.token, process.env.secretJWTKey, (err, authData) => {
-        if (err) res.sendStatus(403);
-        else {
-            console.log("Passed");
-            res.json({ message: "Post created...", authData });
-        }
-    })
+app.post('/logOut', function(req, res) {
+    res.clearCookie("token");
+    res.clearCookie("userID");
+    res.render("login", { errors: "" });
+})
+
+app.get('/home', accessToken.authenticateToken, function(req,res) {
+    const userID = req.cookies.userID;
+    visited_db.getVisited(userID).then((visited) => {
+        return res.render('home', { visited: visited, abr2name: abr2name });
+    });
 })
 
 app.get('/register', function(req, res) {
