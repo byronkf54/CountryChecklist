@@ -12,11 +12,12 @@
         <form action="/login" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                <input type="text" class="form-control" id="username" name="user" placeholder="Enter Username">
+                <p id="user-error-list" class="text-danger"></p>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
               </div>
               <button type="submit" class="btn btn-primary">Login</button>
             </form>
@@ -24,4 +25,12 @@
             <button type="submit">Not registered?</button>
         </form>        
     </body>
+    <script>
+        var errors = <%-JSON.stringify(errors) %>;
+        if (errors.length != 0) {
+            errors.forEach(element => {
+                $('#user-error-list').html(element + ". ");
+            });
+        }
+    </script>
 </html>
