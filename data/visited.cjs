@@ -6,7 +6,7 @@ var visited = {}; // dictionary for abrev to visited status used in setting colo
 // function checks if the user has any data for each country in the DB, if not adds new record with default values
 function initialiseVisits(userID) {
   Object.keys(abr2name).forEach(element => {
-    pool.query(`SELECT * FROM visited_status WHERE userID = ${userID} and countryAbr = '${element}'`, (error, rows) => {
+    pool.query(`SELECT * FROM visited_status WHERE userID = ${userID} and countryAbr = '${element}'`, (err, rows) => {
       if (rows.length == 0) {
         const row = { userID: userID, countryAbr: element, countryName: abr2name[element], visited: 0 };
         pool.query('INSERT INTO visited_status SET ?', row, (err, res) => {
@@ -21,7 +21,7 @@ function initialiseVisits(userID) {
 // function to retrieve visited status of all countries
 function getVisited(userID) {
   return new Promise(function (resolve, reject) {
-    pool.query(`SELECT countryAbr, visited FROM visited_status WHERE userID = ${userID}`, (error, rows) => {    
+    pool.query(`SELECT countryAbr, visited FROM visited_status WHERE userID = ${userID}`, (err, rows) => {
       rows.forEach(row => {
         visited[row.countryAbr] = Boolean(row.visited);
       });
@@ -32,7 +32,7 @@ function getVisited(userID) {
 
 function getVisitedCount(userID) {
   return new Promise(function (resolve, reject) {
-    pool.query(`SELECT COUNT(*) AS visitedCount FROM visited_status WHERE userID = ${userID} AND visited = 1`, (error, rows) => {
+    pool.query(`SELECT COUNT(*) AS visitedCount FROM visited_status WHERE userID = ${userID} AND visited = 1`, (err, rows) => {
       resolve(rows[0].visitedCount);
     });
   });
