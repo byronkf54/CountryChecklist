@@ -62,10 +62,16 @@ app.post('/updateVisitedStatus', function(req, res) {
 })
 
 app.post('/createUser', async function(req, res) {
-    if (req.body.user == undefined) {
-        res.render('register');
+    if (req.body.user == undefined || req.body.user.length < 1) {
+        res.render('register', { errors: ["Username must not be empty"] });
     }
     const user = req.body.user;
+    // do password validation
+    if (!auth.validatePassword(req.body.password)) {
+        return res.render('register', { errors: ["Password must meet the criteria: \n" + 
+                                            "Between 8 and 100 characters, \n" + 
+                                            "Contain an uppercase, lowercase, digit and symbol"] } );
+    }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     user_db.createUser(user, hashedPassword).then((userID) => {
         if (userID == -1) {
@@ -135,12 +141,12 @@ app.get('/home', auth.authenticateToken, function(req,res) {
 })
 
 app.get('/register', function(req, res) {
-    res.render('register', { errors: "" });
+    res.render('register', { errors: [""] });
 })
 
 app.get('/login', function(req, res) {
-    if (req.cookies.userID == req.cookies.token == undefined) {
-        res.render('login', { errors: "" });   
+    if (req.cookies.userID == undefined) {
+        res.render('login', { errors: [""] });
     }
     else {
         const userID = req.cookies.userID;

@@ -18,19 +18,15 @@
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
             </div>
+            <p id="error-list" class="text-danger"></p>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
         <form action="/login" method="get">
             <button type="submit">Already registered?</button>
         </form>
-        <p id="error-list" class="text-danger"></p>
     </body>
     <script>
-        var errors = <%-JSON.stringify(errors) %>;
-        if (errors.length != 0) {
-            errors.forEach(element => {
-                $('#error-list').html(element + ". ");
-            });
-        }
+        var errors = [<%-JSON.stringify(errors) %>];
+        $('#error-list').html(errors + "");
     </script>
 </html>
