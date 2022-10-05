@@ -93,8 +93,8 @@ app.post('/createUser', async function(req, res) {
 })
 
 app.post('/login', function(req, res) {
-    if (req.body.user == undefined) {
-        res.render('login');
+    if (req.body.user.length == 0 || req.body.user == undefined) {
+        res.render('login', { errors: ["Username can't be empty."] });
     }
     const user = req.body.user;
     const password = req.body.password;
