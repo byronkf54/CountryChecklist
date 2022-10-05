@@ -1,7 +1,5 @@
-const { Result } = require('express-validator');
-const models = require('../lib/models');
-
 const pool = require('../lib/db').pool; // import for db connection
+const { User, visited_status } = require('../lib/models');
 
 function createUser(user, hashedPassword) {
     return new Promise(function (resolve, reject) {
@@ -29,7 +27,7 @@ function getUser(user) {
             if (err) throw (err)
 
             if (rows.length == 0) {
-                resolve(models.User.build());
+                resolve(User.build());
             }
             else {
                 resolve(rows[0]);
