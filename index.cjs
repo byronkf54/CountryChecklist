@@ -119,8 +119,7 @@ app.post('/login', function(req, res) {
                     });
                 }
                 else { // password incorrect
-                    console.log("Retry password");
-                    return res.render()
+                    return res.render("login", { errors: ["Password incorrect."]})
                 }
             })
         }
