@@ -12,7 +12,7 @@ var fs = require('fs');
 var abr2name = require("./public/abr2name.js").abr2name;
 var visited_db = require("./data/visited.cjs");
 var user_db = require("./data/user.cjs");
-const accessToken = require("./lib/generateAccessToken");
+const auth = require("./lib/authentication");
 
 var app = express();
 app.use(bodyParser.json());
@@ -23,14 +23,14 @@ app.use(bodyParser.urlencoded({
 }));
 app.set('view engine', 'ejs');
 
-app.post('/CountryList', accessToken.authenticateToken, function(req,res) {
+app.post('/CountryList', auth.authenticateToken, function(req,res) {
     var userID = req.cookies.userID;
     visited_db.getVisited(userID).then((visited) => {
         return res.render('CountryList', { visited: visited, abr2name: abr2name });
     });
 })
 
-app.post('/CountryMap', accessToken.authenticateToken, function(req,res) {
+app.post('/CountryMap', auth.authenticateToken, function(req,res) {
     // check if user has data in DB
     var userID = req.cookies.userID;
     // get current visit status
@@ -73,7 +73,7 @@ app.post('/createUser', async function(req, res) {
         }
         else {
             // generate access token so user can stay logged in
-            const token = accessToken.generateAccessToken({user: user});
+            const token = auth.generateAccessToken({user: user});
             res = setCookies(res, "token", token);
             res = setCookies(res, "userID", userID);
             
@@ -102,7 +102,7 @@ app.post('/login', function(req, res) {
             bcrypt.compare(password, hashedPassword).then((comparison) => {
                 if (comparison) {
                     // generate access token so user can access pages requiring authorisation
-                    const token = accessToken.generateAccessToken({user: user});
+                    const token = auth.generateAccessToken({user: user});
                     const userID = result.userID;
                     res = setCookies(res, "token", token);
                     res = setCookies(res, "userID", userID);
@@ -127,7 +127,7 @@ app.post('/logOut', function(req, res) {
     res.render("login", { errors: "" });
 })
 
-app.get('/home', accessToken.authenticateToken, function(req,res) {
+app.get('/home', auth.authenticateToken, function(req,res) {
     const userID = req.cookies.userID;
     visited_db.getVisited(userID).then((visited) => {
         return res.render('home', { visited: visited, abr2name: abr2name });
