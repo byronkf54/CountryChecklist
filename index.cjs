@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const dayjs = require("dayjs");
 const cookieParser = require("cookie-parser");
-require('dotenv').config({path: __dirname + '/.env'})
+require('dotenv').config()
 var fs = require('fs');
 
 // custom files we require access to
