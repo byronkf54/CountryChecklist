@@ -1,10 +1,11 @@
-const db = require('../lib/db').db; // import for db connection
+const mongoClient = require('../lib/db').mongoClient; // import for db connection
 const abr2name = require('../public/abr2name.js').abr2name; // dictionary of country abreviations to full names
 
 var visited = {}; // dictionary for abrev to visited status used in setting colours of countries
 
 // function checks if the user has any data for each country in the DB, if not adds new record with default values
 async function initialiseVisits(userID) {
+    let db = mongoClient.db('CountryChecklistDB')
     for (const element of Object.keys(abr2name)) {
         const existingRow = await db.visited_status.findOne({ userID: userID, countryAbr: element });
         if (!existingRow) {
