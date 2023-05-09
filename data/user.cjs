@@ -1,39 +1,31 @@
-const pool = require('../lib/db').pool; // import for db connection
-const { User, visited_status } = require('../lib/models');
+const connectToCluster = require('../lib/db').pool; // import for db connection
 
-function createUser(user, hashedPassword) {
-    return new Promise(function (resolve, reject) {
-        // check if username already exists
-        pool.query(`SELECT * FROM users WHERE user = '${user}'`, (err, rows) => {
-            if (err) throw (err)
+// Create User
+async function createUser(user, hashedPassword) {
+    const db = connectToCluster().db('CountryChecklistDB');
 
-            if (rows.length != 0) {
-                resolve(-1);
-            }
-            else {
-                pool.query(`INSERT INTO users (user, password) VALUES ('${user}', '${hashedPassword}')`, (err, result) => {
-                    if (err) throw (err)
-                    resolve(result.insertId);
-                })
-            }
-        })
-    });
+    // Check if user already exists
+    const existingUser = await db.collection('users').findOne({ user: user });
+    if (existingUser) {
+        return -1;
+    }
+
+    // Insert new user
+    const result = await db.collection('users').insertOne({ user: user, password: hashedPassword });
+    return result.insertedId;
 }
 
-function getUser(user) {
-    return new Promise(function (resolve, reject) {
-        // select user by name
-        pool.query(`SELECT * FROM users WHERE user = '${user}'`, (err, rows) => {
-            if (err) throw (err)
 
-            if (rows.length == 0) {
-                resolve(User.build());
-            }
-            else {
-                resolve(rows[0]);
-            }
-        });
-    });
+async function getUser(user) {
+    const db = connectToCluster().db('CountryChecklistDB');
+
+    // Select user by name
+    const result = await db.collection('users').findOne({ user: user });
+    if (!result) {
+        return {}; // return an empty object if no user is found
+    }
+
+    return result;
 }
 
 
