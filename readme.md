@@ -23,7 +23,13 @@ Interactive World Map - SimpleMaps
  - Filter and Sort for the List of Countries required some planning for all the different states the list could be in.
  - Authentication with JWT required some research on checking they have authorisation before accessing specific pages.
 
- ## **Installation**
+## **Installation**
  1. npm i (install required packages)
  2. Set environment variables for your database connection, Sequelize should do the rest (creating tables)
  e.g. hostname = "local"
+
+## **Features in Development**
+ - Population
+ - Flag
+ - Continent
+ - Land Area

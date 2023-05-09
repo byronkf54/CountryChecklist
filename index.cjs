@@ -9,10 +9,10 @@ require('dotenv').config({path: __dirname + '/.env'})
 var fs = require('fs');
 
 // custom files we require access to
-var abr2name = require("./public/abr2name.js").abr2name;
-var visited_db = require("./data/visited.cjs");
-var user_db = require("./data/user.cjs");
-const auth = require("./lib/authentication");
+var abr2name = require("/app/public/abr2name.js").abr2name;
+var visited_db = require("/app/data/visited.cjs");
+var user_db = require("/app/data/user.cjs");
+const auth = require("/app/lib/authentication");
 
 var app = express();
 app.use(bodyParser.json());
