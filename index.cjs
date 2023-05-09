@@ -161,7 +161,7 @@ app.get('/',function(req,res) {
     });
     // check user is logged in    
     if (req.cookies.token == undefined) {
-        res.render('login', { errors: "" });
+        res.render('register', { errors: "" });
     }
     else if (req.cookies.userID != undefined) {
         const userID = req.cookies.userID;
