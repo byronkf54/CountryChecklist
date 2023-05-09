@@ -2,8 +2,8 @@ const mongodb_client = require('../lib/db'); // import for db connection
 
 // Create User
 async function createUser(user, hashedPassword) {
-    mongodb_client.connectToCluster().then(async (db) => {
-        db('CountryChecklistDB')
+    mongodb_client.connectToCluster().then(async (client) => {
+        let db = client.db('CountryChecklistDB')
         // Check if user already exists
         const existingUser = await db.collection('users').findOne({user: user});
         if (existingUser) {
@@ -16,11 +16,10 @@ async function createUser(user, hashedPassword) {
     });
 }
 
-createUser()
 
 async function getUser(user) {
-    const db = mongodb_client.connectToCluster().then(async (db) => {
-        db('CountryChecklistDB');
+    mongodb_client.connectToCluster().then(async (client) => {
+        let db = client.db('CountryChecklistDB');
 
         // Select user by name
         const result = await db.collection('users').findOne({user: user});
