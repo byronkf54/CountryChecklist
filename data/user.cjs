@@ -1,4 +1,4 @@
-const connectToCluster = require('../lib/db').pool; // import for db connection
+const connectToCluster = require('../lib/db'); // import for db connection
 
 // Create User
 async function createUser(user, hashedPassword) {
