@@ -6,13 +6,14 @@ async function createUser(user, hashedPassword) {
         let db = client.db('CountryChecklistDB')
         // Check if user already exists
         const existingUser = await db.collection('users').findOne({userID: user});
+        console.log("existingUser: ", existingUser)
         if (existingUser) {
             return -1;
         }
 
         // Insert new user
-        const result = await db.collection('users').insertOne({userID: user, password: hashedPassword});
-        return result.insertedId;
+        console.log("User: ", user)
+        return (await db.collection('users').insertOne({userID: user, password: hashedPassword})).insertedId;
     });
 }
 

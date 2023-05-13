@@ -73,7 +73,7 @@ app.post('/createUser', async function(req, res) {
                                             "Contain an uppercase, lowercase, digit and symbol"] } );
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    user_db.createUser(user, hashedPassword).then((userID) => {
+    user_db.createUser(user, hashedPassword).then(async (userID) => {
         console.log("USERID: ", userID)
         if (userID == -1) {
             return res.render('register', { errors: ["Username is not available"] })
@@ -84,7 +84,7 @@ app.post('/createUser', async function(req, res) {
             res = setCookies(res, "token", token);
             res = setCookies(res, "userID", userID);
             
-            visited_db.initialiseVisits(userID);
+            await visited_db.initialiseVisits(userID);
             // get current visit status
             visited_db.getVisited(userID).then((visited) => {
                 return res.render('home', { visited: visited, abr2name: abr2name });
