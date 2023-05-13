@@ -36,26 +36,25 @@ async function initialiseVisits(userID) {
 }
 
 // function to retrieve visited status of all countries
-function getVisited(userID) {
-    mongodb_client.connectToCluster().then(async (client) => {
-        let db = client.db('CountryChecklistDB')
-        // Check if user already exists
-        const visited_countries = await db.collection('users').find({userID: userID});
-        for (let row in visited_countries) {
-            visited[row.countryAbr] = Boolean(row.visited)
-        }
-        return visited;
-    });
+async function getVisited(userID) {
+    const client = await mongodb_client.connectToCluster();
+    const db = client.db('CountryChecklistDB');
+    const visited = {};
+
+    const visitedCountries = await db.collection('visited_status').find({userID: userID}).toArray();
+    for (const row of visitedCountries) {
+        visited[row.countryAbr] = Boolean(row.visited);
+    }
+
+    return visited;
 }
 
 async function getVisitedCount(userID) {
-    mongodb_client.connectToCluster().then(async (client) => {
-        let db = client.db('CountryChecklistDB')
+    const client = await mongodb_client.connectToCluster();
+    const db = client.db('CountryChecklistDB');
 
-        return db.collection('visited_status')
-            .find({userID: userID, visited: 1})
-            .count();
-    });
+    return await db.collection('visited_status')
+        .countDocuments({userID: userID, visited: 1});
 }
 
 
