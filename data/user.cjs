@@ -12,8 +12,8 @@ async function createUser(user, hashedPassword) {
         }
 
         // Insert new user
-        console.log("User: ", user)
-        return (await db.collection('users').insertOne({userID: user, password: hashedPassword})).insertedId;
+        console.log("User: ", user);
+        return (await db.collection('users').insertOne({userID: user, password: hashedPassword})).insertedId.toString();
     });
 }
 

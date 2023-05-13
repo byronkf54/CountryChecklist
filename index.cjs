@@ -75,7 +75,7 @@ app.post('/createUser', async function(req, res) {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     user_db.createUser(user, hashedPassword).then(async (userID) => {
         console.log("USERID: ", userID)
-        if (userID == -1) {
+        if (userID === -1) {
             return res.render('register', { errors: ["Username is not available"] })
         }
         else {
@@ -94,7 +94,7 @@ app.post('/createUser', async function(req, res) {
 })
 
 app.post('/login', function(req, res) {
-    if (req.body.user.length == 0 || req.body.user == undefined) {
+    if (req.body.user.length === 0) {
         res.render('login', { errors: ["Username can't be empty."] });
     }
     const user = req.body.user;
