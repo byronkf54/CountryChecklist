@@ -1,7 +1,6 @@
 const mongodb_client = require('../lib/db'); // import for db connection
 const abr2name = require('../public/abr2name.js').abr2name; // dictionary of country abreviations to full names
 
-var visited = {}; // dictionary for abrev to visited status used in setting colours of countries
 
 // function checks if the user has any data for each country in the DB, if not adds new record with default values
 async function initialiseVisits(userID) {
@@ -24,8 +23,8 @@ async function initialiseVisits(userID) {
 // function to retrieve visited status of all countries
 async function getVisited(userID) {
     const client = await mongodb_client.connectToCluster();
-    const db = client.db('CountryChecklistDB');
-    const visited = {};
+    const db = await client.db('CountryChecklistDB');
+    const visited = {};  // dictionary for abrev to visited status used in setting colours of countries
 
     const visitedCountries = await db.collection('visited_status').find({userID: userID}).toArray();
     for (const row of visitedCountries) {
@@ -40,7 +39,7 @@ async function getVisitedCount(userID) {
     const db = client.db('CountryChecklistDB');
 
     return await db.collection('visited_status')
-        .countDocuments({userID: userID, visited: 1});
+        .count({userID: userID, visited: 1});
 }
 
 
