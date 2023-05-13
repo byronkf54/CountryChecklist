@@ -18,17 +18,16 @@ async function createUser(user, hashedPassword) {
 
 
 async function getUser(user) {
-    mongodb_client.connectToCluster().then(async (client) => {
-        let db = client.db('CountryChecklistDB');
+    const client = await mongodb_client.connectToCluster()
+    let db = client.db('CountryChecklistDB');
 
-        // Select user by name
-        const result = await db.collection('users').findOne({userID: user});
-        if (!result) {
-            return {}; // return an empty object if no user is found
-        }
-
-        return result;
-    })
+    // Select user by name
+    const result = await db.collection('users').findOne({userID: user});
+    if (!result) {
+        return {}; // return an empty object if no user is found
+    }
+    console.log("GET USER: ", result)
+    return result;
 }
 
 

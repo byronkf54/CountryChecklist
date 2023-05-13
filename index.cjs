@@ -108,7 +108,7 @@ app.post('/login', function(req, res) {
     const user = req.body.user;
     const password = req.body.password;
 
-    user_db.getUser(user).then((result) => {
+    user_db.getUser(user).then(async (result) => {
         if (result.user === undefined) {
             return res.render('login', { errors: ["Username is not recognised"] })
         }
