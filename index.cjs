@@ -50,31 +50,37 @@ app.get('/getVisitedCount', function(req, res) {
     })
 })
 
-app.post('/updateVisitedStatus', function(req, res) {
+app.post('/updateVisitedStatus', async function (req, res) {
     var countryAbr = req.body.countryAbr;
     var status = req.body.visitedStatus;
     var userID = req.cookies.userID;
+    console.log(countryAbr, status, userID)
     //update tempDB
-    visited_db.updateVisitedStatus(userID, countryAbr, status);
+    await visited_db.updateVisitedStatus(userID, countryAbr, status);
     visited_db.getVisited(userID).then((visited) => {
-        return res.render('home', { visited: visited, abr2name: abr2name });
+        return res.render('home', {visited: visited, abr2name: abr2name});
     });
 })
 
 app.post('/createUser', async function(req, res) {
-    if (req.body.user == undefined || req.body.user.length < 1) {
+    // check username is not empty
+    if (req.body.user === undefined || req.body.user.length < 1) {
         res.render('register', { errors: ["Username must not be empty"] });
     }
     const user = req.body.user;
-    // do password validation
+
+    // check password is valid
     if (!auth.validatePassword(req.body.password)) {
         return res.render('register', { errors: ["Password must meet the criteria: \n" + 
                                             "Between 8 and 100 characters, \n" + 
                                             "Contain an uppercase, lowercase, digit and symbol"] } );
     }
+
+    // hash password using Bcrypt
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    // create user and access token
     user_db.createUser(user, hashedPassword).then(async (userID) => {
-        console.log("USERID: ", userID)
         if (userID === -1) {
             return res.render('register', { errors: ["Username is not available"] })
         }
@@ -83,8 +89,10 @@ app.post('/createUser', async function(req, res) {
             const token = auth.generateAccessToken({user: user});
             res = setCookies(res, "token", token);
             res = setCookies(res, "userID", userID);
-            
+
+            // initialise visit status
             await visited_db.initialiseVisits(userID);
+
             // get current visit status
             visited_db.getVisited(userID).then((visited) => {
                 return res.render('home', { visited: visited, abr2name: abr2name });
