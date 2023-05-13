@@ -108,17 +108,17 @@ app.post('/login', function(req, res) {
     const user = req.body.user;
     const password = req.body.password;
 
-    user_db.getUser(user).then(async (result) => {
-        if (result.user === undefined) {
+    user_db.getUser(user).then(async (existingUser) => {
+        if (existingUser.user === undefined) {
             return res.render('login', { errors: ["Username is not recognised"] })
         }
         else {
-            const hashedPassword = result.password;
+            const hashedPassword = existingUser.password;
             bcrypt.compare(password, hashedPassword).then((comparison) => {
                 if (comparison) {
                     // generate access token so user can access pages requiring authorisation
                     const token = auth.generateAccessToken({user: user});
-                    const userID = result.userID;
+                    const userID = existingUser.userID;
                     res = setCookies(res, "token", token);
                     res = setCookies(res, "userID", userID);
                     

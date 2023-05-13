@@ -22,12 +22,15 @@ async function getUser(user) {
     let db = client.db('CountryChecklistDB');
 
     // Select user by name
-    const result = await db.collection('users').findOne({userID: user});
-    if (!result) {
-        return {}; // return an empty object if no user is found
-    }
-    console.log("GET USER: ", result)
-    return result;
+    return db.collection('users').findOne({ user: user })
+        .then(userRow => {
+            console.log("userROW: ", userRow)
+            if (!userRow) {
+                return {}; // return an empty object if no user is found
+            }
+
+            return userRow;
+        });
 }
 
 
