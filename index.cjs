@@ -67,7 +67,7 @@ app.post('/createUser', async function(req, res) {
     if (req.body.user === undefined || req.body.user.length < 1) {
         res.render('register', { errors: ["Username must not be empty"] });
     }
-    const user = req.body.user;
+    const username = req.body.user;
 
     // check password is valid
     if (!auth.validatePassword(req.body.password)) {
@@ -80,13 +80,13 @@ app.post('/createUser', async function(req, res) {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     // create user and access token
-    user_db.createUser(user, hashedPassword).then(async (userID) => {
+    user_db.createUser(username, hashedPassword).then(async (userID) => {
         if (userID === -1) {
             return res.render('register', { errors: ["Username is not available"] })
         }
         else {
             // generate access token so user can stay logged in
-            const token = auth.generateAccessToken({user: user});
+            const token = auth.generateAccessToken({user: username});
             res = setCookies(res, "token", token);
             res = setCookies(res, "userID", userID);
 
@@ -105,11 +105,11 @@ app.post('/login', function(req, res) {
     if (req.body.user.length === 0) {
         res.render('login', { errors: ["Username can't be empty."] });
     }
-    const user = req.body.user;
+    const username = req.body.user;
     const password = req.body.password;
 
-    user_db.getUser(user).then(async (existingUser) => {
-        if (existingUser.user === undefined) {
+    user_db.getUser(username).then(async (existingUser) => {
+        if (existingUser === undefined) {
             return res.render('login', { errors: ["Username is not recognised"] })
         }
         else {
@@ -117,8 +117,8 @@ app.post('/login', function(req, res) {
             bcrypt.compare(password, hashedPassword).then((comparison) => {
                 if (comparison) {
                     // generate access token so user can access pages requiring authorisation
-                    const token = auth.generateAccessToken({user: user});
-                    const userID = existingUser.userID;
+                    const token = auth.generateAccessToken({user: username});
+                    const userID = existingUser._id;
                     res = setCookies(res, "token", token);
                     res = setCookies(res, "userID", userID);
                     
@@ -153,7 +153,7 @@ app.get('/register', function(req, res) {
 })
 
 app.get('/login', function(req, res) {
-    if (req.cookies.userID == undefined) {
+    if (req.cookies.userID === undefined) {
         res.render('login', { errors: [""] });
     }
     else {
@@ -169,10 +169,10 @@ app.get('/',function(req,res) {
         'Access-control-Allow-Origin': '*'
     });
     // check user is logged in    
-    if (req.cookies.token == undefined) {
+    if (req.cookies.token === undefined) {
         res.render('register', { errors: "" });
     }
-    else if (req.cookies.userID != undefined) {
+    else if (req.cookies.userID !== undefined) {
         const userID = req.cookies.userID;
         visited_db.getVisited(userID).then((visited) => {
             return res.render('home', { visited: visited, abr2name: abr2name });
