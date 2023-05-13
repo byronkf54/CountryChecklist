@@ -22,7 +22,7 @@ async function getUser(user) {
     let db = client.db('CountryChecklistDB');
 
     // Select user by name
-    return db.collection('users').findOne({ user: user })
+    return db.collection('users').findOne({ userID: user })
         .then(userRow => {
             console.log("userROW: ", userRow)
             if (!userRow) {
