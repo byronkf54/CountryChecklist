@@ -1,20 +1,20 @@
-var express = require("express");
+const express = require("express");
 const bcrypt = require("bcrypt");
-var port = process.env.PORT || 3000;
-var bodyParser = require("body-parser");
+const port = process.env.PORT || 3000;
+const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const dayjs = require("dayjs");
 const cookieParser = require("cookie-parser");
 require('dotenv').config()
-var fs = require('fs');
+const fs = require('fs');
 
 // custom files we require access to
-var abr2name = require("/app/public/abr2name.js").abr2name;
-var visited_db = require("/app/data/visited.cjs");
-var user_db = require("/app/data/user.cjs");
+const abr2name = require("/app/public/abr2name.js").abr2name;
+const visited_db = require("/app/data/visited.cjs");
+const user_db = require("/app/data/user.cjs");
 const auth = require("/app/lib/authentication");
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'ejs');
 
 app.post('/CountryList', auth.authenticateToken, function(req,res) {
-    var userID = req.cookies.userID;
+    const userID = req.cookies.userID;
     visited_db.getVisited(userID).then((visited) => {
         return res.render('CountryList', { visited: visited, abr2name: abr2name });
     });
@@ -74,6 +74,7 @@ app.post('/createUser', async function(req, res) {
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     user_db.createUser(user, hashedPassword).then((userID) => {
+        console.log("USERID: ", userID)
         if (userID == -1) {
             return res.render('register', { errors: ["Username is not available"] })
         }

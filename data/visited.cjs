@@ -8,28 +8,14 @@ async function initialiseVisits(userID) {
     mongodb_client.connectToCluster().then(async (client) => {
         let db = client.db('CountryChecklistDB');
         for (const element of Object.keys(abr2name)) {
-            try {
-                const existingRow = await db.collection('visited_status').findOne({
-                    userID: userID,
-                    countryAbr: element
-                });
-                if (!existingRow) {
-                    const row = {userID: userID, countryAbr: element, countryName: abr2name[element], visited: 0};
-                    const result = await db.collection('visited_status').insertOne(row);
-                    console.log(`New document inserted with _id: ${result.insertedId}`);
-                }
-            } catch {
-                console.log("CATCH");
-                console.log(userID);
-                console.log(element);
-                let insertedID = await db.collection('visited_status').update({}, {
-                    $set: {
-                        "userID": userID,
-                        "countryAbr": element,
-                        "visited": 0
-                    }
-                }, false, true);
-                console.log(insertedID);
+            const existingRow = await db.collection('visited_status').findOne({
+                userID: userID,
+                countryAbr: element
+            });
+
+            if (!existingRow) {
+                const row = {userID: userID, countryAbr: element, countryName: abr2name[element], visited: 0};
+                const result = await db.collection('visited_status').insertOne(row);
             }
         }
     });
