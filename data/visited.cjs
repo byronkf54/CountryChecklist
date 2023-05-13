@@ -46,7 +46,7 @@ async function getVisitedCount(userID) {
 
 // function to update visited status
 async function updateVisitedStatus(userID, countryAbr, status) {
-    const client = mongodb_client.connectToCluster()
+    const client = await mongodb_client.connectToCluster()
     let db = client.db('CountryChecklistDB')
 
     await db.collection('visited_status').updateOne(
