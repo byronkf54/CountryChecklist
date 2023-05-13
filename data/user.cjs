@@ -24,6 +24,7 @@ async function getUser(user) {
     // Select user by name
     return db.collection('users').findOne({ userID: user })
         .then(userRow => {
+            userRow = userRow.toObject()
             console.log("userROW: ", userRow)
             if (!userRow) {
                 return {}; // return an empty object if no user is found
