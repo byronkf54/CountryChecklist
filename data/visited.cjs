@@ -14,7 +14,7 @@ async function initialiseVisits(userID) {
 
             if (!existingRow) {
                 const row = {userID: userID, countryAbr: element, countryName: abr2name[element], visited: 0};
-                const result = await db.collection('visited_status').insertOne(row);
+                await db.collection('visited_status').insertOne(row);
             }
         }
     });
